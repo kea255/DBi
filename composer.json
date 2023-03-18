@@ -1,0 +1,20 @@
+{
+    "name": "kea255/DBi",
+    "type": "library",
+    "description": "Класс для удобной работы с Mysql",
+    "keywords": ["Mysql", "placeholder", "library"],
+    "homepage": "https://github.com/kea255/DBi",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Evgenii Kuznetsov"
+        }
+    ],
+    "require": {
+        "php": ">=7.3"
+    },
+    "autoload": {
+      "psr-4": { "DBi\\": "dbi.class.php" }
+    },
+	"version": "1.0.0"
+}

@@ -20,7 +20,7 @@ const dbpass = 'password';
 const dbname = 'databaseName';
 ```
 
-##Использование placeholder-ов
+## Использование placeholder-ов
 Простые, скалярные данные, плейсхолдер: ?
 ```php
 $rows = DBi::select('SELECT * FROM tbl WHERE a=? AND b=? AND c=?', 1, 'test', null);
@@ -68,7 +68,7 @@ DBi::query('INSERT INTO table(?#) VALUES(?a) ON DUPLICATE KEY UPDATE ?a', array_
 INSERT INTO table(`id`, `name`, `age`) VALUES(101, 'Rabbit', 30) ON DUPLICATE KEY UPDATE `id`='101', `name`='Rabbit', `age`='30'
 ```
 
-##Использование выборок
+## Использование выборок
 Выборка всего результата: select()
 ```php
 $rows = DBi::select('SELECT Name, CountryCode FROM City');
@@ -97,7 +97,7 @@ $name = DBi::selectCell('SELECT Name FROM City WHERE CountryCode=?', 'RU');
 printf("%s\n", $name);
 ```
 
-###Можно использовать временные таблицы
+### Можно использовать временные таблицы
 ```php
 DBi::query('CREATE TEMPORARY TABLE t1 SELECT Name, CountryCode FROM City');
 $rows = DBi::select('SELECT * FROM t1');
@@ -106,7 +106,7 @@ foreach($rows as $row){
 }
 ```
 
-###Экономия памяти для больших выборок
+### Экономия памяти для больших выборок
 Можно получать результат по одной строке, не загружая всю выборку в память
 ```php
 $result = DBi::query('SELECT Name, CountryCode FROM City');

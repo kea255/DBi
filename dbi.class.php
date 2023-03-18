@@ -2,7 +2,7 @@
 class DBi {
     public static $mysqli;
 	
-	public function prepare(){
+	public static function prepare(){
 		$args = func_get_args();
 		$query = array_shift($args);
 
@@ -47,58 +47,64 @@ class DBi {
 		return $query;
 	}
 	
-	public function init(){
+	public static function init(){
 		if(!self::$mysqli) self::$mysqli = new mysqli(dbhost, dbuser, dbpass, dbname); 
 		if(self::$mysqli->connect_error) die('Ошибка подключения ('.self::$mysqli->connect_errno.') '.self::$mysqli->connect_error);
 	}
 	
-	public function query(){
+	public static function query(){
 		self::init();
-		$query = call_user_func_array(array(self, 'prepare'), func_get_args());	
+		$query = call_user_func_array(array(__CLASS__, 'prepare'), func_get_args());	
 		$result = self::$mysqli->query($query, MYSQLI_USE_RESULT);
 		if(!$result){ echo("\nSQL Error: ".self::$mysqli->error."\n"); debug_print_backtrace(); die;} else return $result;
 	}
 	
-	public function select(){
+	public static function query_skip_err(){
+		self::init();
+		$query = call_user_func_array(array(__CLASS__, 'prepare'), func_get_args());	
+		$result = self::$mysqli->query($query, MYSQLI_USE_RESULT);
+	}
+	
+	public static function select(){
 		$res = [];
-		$rows = call_user_func_array(array(self, 'query'), func_get_args());
+		$rows = call_user_func_array(array(__CLASS__, 'query'), func_get_args());
 		while($row = $rows->fetch_assoc()) $res[]=$row;
 		$rows->free();
 		return $res;
 	}
-	public function selectCol(){
+	public static function selectCol(){
 		$res = [];
-		$rows = call_user_func_array(array(self, 'query'), func_get_args());
+		$rows = call_user_func_array(array(__CLASS__, 'query'), func_get_args());
 		while($row = $rows->fetch_assoc()) $res[] = array_shift($row);
 		$rows->free();
 		return $res;
 	}
-	public function selectRow(){
-		$rows = call_user_func_array(array(self, 'query'), func_get_args());
+	public static function selectRow(){
+		$rows = call_user_func_array(array(__CLASS__, 'query'), func_get_args());
 		$row = $rows->fetch_assoc();
 		$rows->free();
 		return $row;
 	}
-	public function selectCell(){
+	public static function selectCell(){
 		$res = null;
-		$rows = call_user_func_array(array(self, 'query'), func_get_args());
+		$rows = call_user_func_array(array(__CLASS__, 'query'), func_get_args());
 		$row = $rows->fetch_assoc();
 		$res = array_shift($row);
 		$rows->free();
 		return $res;
 	}
 	
-	public function transaction(){
+	public static function transaction(){
 		self::$mysqli->begin_transaction();
 	}
-	public function commit(){
+	public static function commit(){
 		self::$mysqli->commit();
 	}
-	public function rollback(){
+	public static function rollback(){
 		self::$mysqli->rollback();
 	}
 	
-	private function _pass_by_reference(&$arr){
+	private static function _pass_by_reference(&$arr){
 		$refs = array();
 		foreach($arr as $key => $value){
 			$refs[$key] = &$arr[$key];
@@ -106,7 +112,7 @@ class DBi {
 		return $refs;
 	}
 	
-	private function mb_substr_replace($original, $replacement, $position, $length){
+	private static function mb_substr_replace($original, $replacement, $position, $length){
 		$startString = mb_substr($original, 0, $position, "UTF-8");
 		$endString = mb_substr($original, $position + $length, mb_strlen($original), "UTF-8");
 		$out = $startString . $replacement . $endString;

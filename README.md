@@ -123,5 +123,4 @@ while($row = $result->fetch_assoc()){
 	printf("%s (%s)\n", $row["Name"], $row["CountryCode"]);
 }
 $result->free();
-}
 ```

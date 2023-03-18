@@ -21,7 +21,7 @@ const dbname = 'databaseName';
 ```
 
 ## Использование placeholder-ов
-Простые, скалярные данные, плейсхолдер: ?
+#### Простые, скалярные данные, плейсхолдер: ?
 ```php
 $rows = DBi::select('SELECT * FROM tbl WHERE a=? AND b=? AND c=?', 1, 'test', null);
 ```
@@ -29,8 +29,9 @@ $rows = DBi::select('SELECT * FROM tbl WHERE a=? AND b=? AND c=?', 1, 'test', nu
 ```sql
 SELECT * FROM tbl WHERE a=1 AND b='test' AND c=NULL
 ```
+<br/>
 
-Массив, плейсхолдер: ?a
+#### Массив, плейсхолдер: ?a
 ```php
 $rows = DBi::select('SELECT * FROM tbl WHERE date IN(?a)', ['2006-03-02', '2012-01-02', '2022-05-01']);
 ```
@@ -38,8 +39,9 @@ $rows = DBi::select('SELECT * FROM tbl WHERE date IN(?a)', ['2006-03-02', '2012-
 ```sql
 SELECT * FROM tbl WHERE date IN('2006-03-02', '2012-01-02', '2022-05-01')
 ```
+<br/>
 
-Ассоциативный массив для запросов типа UPDATE
+#### Ассоциативный массив для запросов типа UPDATE
 ```php
 DBi::query('UPDATE tbl SET ?a', ['id'=>10, 'date'=>"2006-03-02"]);
 ```
@@ -47,8 +49,9 @@ DBi::query('UPDATE tbl SET ?a', ['id'=>10, 'date'=>"2006-03-02"]);
 ```sql
 UPDATE tbl SET `id`='10', `date`='2006-03-02'
 ```
+<br/>
 
-Пример для запроса INSERT
+#### Пример для запроса INSERT
 ```php
 $data = ['id' => 101, 'name' => 'Rabbit', 'age' => 30];
 DBi::query('INSERT INTO table(?#) VALUES(?a)', array_keys($data), array_values($data));
@@ -57,8 +60,9 @@ DBi::query('INSERT INTO table(?#) VALUES(?a)', array_keys($data), array_values($
 ```sql
 INSERT INTO table(`id`, `name`, `age`) VALUES(101, 'Rabbit', 30)
 ```
+<br/>
 
-Пример для запроса INSERT ON DUPLICATE KEY UPDATE
+#### Пример для запроса INSERT ON DUPLICATE KEY UPDATE
 ```php
 $data = ['id' => 101, 'name' => 'Rabbit', 'age' => 30];
 DBi::query('INSERT INTO table(?#) VALUES(?a) ON DUPLICATE KEY UPDATE ?a', array_keys($data), array_values($data), $data);
@@ -67,6 +71,7 @@ DBi::query('INSERT INTO table(?#) VALUES(?a) ON DUPLICATE KEY UPDATE ?a', array_
 ```sql
 INSERT INTO table(`id`, `name`, `age`) VALUES(101, 'Rabbit', 30) ON DUPLICATE KEY UPDATE `id`='101', `name`='Rabbit', `age`='30'
 ```
+<br/>
 
 ## Использование выборок
 Выборка всего результата: select()
@@ -76,12 +81,14 @@ foreach($rows as $row){
     printf("%s (%s)\n", $row["Name"], $row["CountryCode"]);
 }
 ```
+<br/>
 
 Выборка строки: selectRow()
 ```php
 $row = DBi::selectRow('SELECT Name, CountryCode FROM City LIMIT 1');
 printf("%s (%s)\n", $row["Name"], $row["CountryCode"]);
 ```
+<br/>
 
 Выборка столбца: selectCol()
 ```php
@@ -90,12 +97,14 @@ foreach($names as $name){
     printf("%s\n", $name);
 }
 ```
+<br/>
 
 Выборка ячейки: selectCell()
 ```php
 $name = DBi::selectCell('SELECT Name FROM City WHERE CountryCode=?', 'RU');
 printf("%s\n", $name);
 ```
+<br/>
 
 ### Можно использовать временные таблицы
 ```php

@@ -1,18 +1,18 @@
 # DBi
-Êëàññ äëÿ óäîáíîé ðàáîòû ñ Mysql
-íåáîëüøàÿ îáåðòêà ê ìîäóëþ [mysqli](https://www.php.net/manual/ru/book.mysqli.php)
-ðåàëèçóþùàÿ:
-* placeholder-û
-* àâòî ñîåäèíåíèå ïðè ïåðâîì çàïðîñå
-* óäîáíûå âûáîðêè â ìàññèâ
+ÐšÐ»Ð°ÑÑ Ð´Ð»Ñ ÑƒÐ´Ð¾Ð±Ð½Ð¾Ð¹ Ñ€Ð°Ð±Ð¾Ñ‚Ñ‹ Ñ Mysql
+Ð½ÐµÐ±Ð¾Ð»ÑŒÑˆÐ°Ñ Ð¾Ð±ÐµÑ€Ñ‚ÐºÐ° Ðº Ð¼Ð¾Ð´ÑƒÐ»ÑŽ [mysqli](https://www.php.net/manual/ru/book.mysqli.php)
+Ñ€ÐµÐ°Ð»Ð¸Ð·ÑƒÑŽÑ‰Ð°Ñ:
+* placeholder-Ñ‹
+* Ð°Ð²Ñ‚Ð¾ ÑÐ¾ÐµÐ´Ð¸Ð½ÐµÐ½Ð¸Ðµ Ð¿Ñ€Ð¸ Ð¿ÐµÑ€Ð²Ð¾Ð¼ Ð·Ð°Ð¿Ñ€Ð¾ÑÐµ
+* ÑƒÐ´Ð¾Ð±Ð½Ñ‹Ðµ Ð²Ñ‹Ð±Ð¾Ñ€ÐºÐ¸ Ð² Ð¼Ð°ÑÑÐ¸Ð²
 
-### Óñòàíîâêà
-Èìïîðòèðóéòå dbi.class.php â âàø ïðîåêò
+### Ð£ÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ°
+Ð˜Ð¼Ð¿Ð¾Ñ€Ñ‚Ð¸Ñ€ÑƒÐ¹Ñ‚Ðµ dbi.class.php Ð² Ð²Ð°Ñˆ Ð¿Ñ€Ð¾ÐµÐºÑ‚
 ```php
 require_once 'dbi.class.php';
 ```
 
-Äîáàâòå â êîíôèãóðàöèîííûé ôàéë âàøåãî ïðîåêòà êîíñòàíòû ñ âàøèìè äàííûìè ñîåäèíåíèÿ
+Ð”Ð¾Ð±Ð°Ð²Ñ‚Ðµ Ð² ÐºÐ¾Ð½Ñ„Ð¸Ð³ÑƒÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ñ‹Ð¹ Ñ„Ð°Ð¹Ð» Ð²Ð°ÑˆÐµÐ³Ð¾ Ð¿Ñ€Ð¾ÐµÐºÑ‚Ð° ÐºÐ¾Ð½ÑÑ‚Ð°Ð½Ñ‚Ñ‹ Ñ Ð²Ð°ÑˆÐ¸Ð¼Ð¸ Ð´Ð°Ð½Ð½Ñ‹Ð¼Ð¸ ÑÐ¾ÐµÐ´Ð¸Ð½ÐµÐ½Ð¸Ñ
 ```php
 const dbhost = 'localhost';
 const dbuser = 'username';
@@ -20,56 +20,56 @@ const dbpass = 'password';
 const dbname = 'databaseName';
 ```
 
-##Èñïîëüçîâàíèå placeholder-îâ
-Ïðîñòûå, ñêàëÿðíûå äàííûå, ïëåéñõîëäåð: ?
+##Ð˜ÑÐ¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ð½Ð¸Ðµ placeholder-Ð¾Ð²
+ÐŸÑ€Ð¾ÑÑ‚Ñ‹Ðµ, ÑÐºÐ°Ð»ÑÑ€Ð½Ñ‹Ðµ Ð´Ð°Ð½Ð½Ñ‹Ðµ, Ð¿Ð»ÐµÐ¹ÑÑ…Ð¾Ð»Ð´ÐµÑ€: ?
 ```php
 $rows = DBi::select('SELECT * FROM tbl WHERE a=? AND b=? AND c=?', 1, 'test', null);
 ```
-áóäåò âûïîëíåí çàïðîñ
+Ð±ÑƒÐ´ÐµÑ‚ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½ Ð·Ð°Ð¿Ñ€Ð¾Ñ
 ```sql
 SELECT * FROM tbl WHERE a=1 AND b='test' AND c=NULL
 ```
 
-Ìàññèâ, ïëåéñõîëäåð: ?a
+ÐœÐ°ÑÑÐ¸Ð², Ð¿Ð»ÐµÐ¹ÑÑ…Ð¾Ð»Ð´ÐµÑ€: ?a
 ```php
 $rows = DBi::select('SELECT * FROM tbl WHERE date IN(?a)', ['2006-03-02', '2012-01-02', '2022-05-01']);
 ```
-áóäåò âûïîëíåí çàïðîñ
+Ð±ÑƒÐ´ÐµÑ‚ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½ Ð·Ð°Ð¿Ñ€Ð¾Ñ
 ```sql
 SELECT * FROM tbl WHERE date IN('2006-03-02', '2012-01-02', '2022-05-01')
 ```
 
-Àññîöèàòèâíûé ìàññèâ äëÿ çàïðîñîâ òèïà UPDATE
+ÐÑÑÐ¾Ñ†Ð¸Ð°Ñ‚Ð¸Ð²Ð½Ñ‹Ð¹ Ð¼Ð°ÑÑÐ¸Ð² Ð´Ð»Ñ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ¾Ð² Ñ‚Ð¸Ð¿Ð° UPDATE
 ```php
 DBi::query('UPDATE tbl SET ?a', ['id'=>10, 'date'=>"2006-03-02"]);
 ```
-áóäåò âûïîëíåí çàïðîñ
+Ð±ÑƒÐ´ÐµÑ‚ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½ Ð·Ð°Ð¿Ñ€Ð¾Ñ
 ```sql
 UPDATE tbl SET `id`='10', `date`='2006-03-02'
 ```
 
-Ïðèìåð äëÿ çàïðîñà INSERT
+ÐŸÑ€Ð¸Ð¼ÐµÑ€ Ð´Ð»Ñ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ° INSERT
 ```php
 $data = ['id' => 101, 'name' => 'Rabbit', 'age' => 30];
 DBi::query('INSERT INTO table(?#) VALUES(?a)', array_keys($data), array_values($data));
 ```
-áóäåò âûïîëíåí çàïðîñ
+Ð±ÑƒÐ´ÐµÑ‚ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½ Ð·Ð°Ð¿Ñ€Ð¾Ñ
 ```sql
 INSERT INTO table(`id`, `name`, `age`) VALUES(101, 'Rabbit', 30)
 ```
 
-Ïðèìåð äëÿ çàïðîñà INSERT ON DUPLICATE KEY UPDATE
+ÐŸÑ€Ð¸Ð¼ÐµÑ€ Ð´Ð»Ñ Ð·Ð°Ð¿Ñ€Ð¾ÑÐ° INSERT ON DUPLICATE KEY UPDATE
 ```php
 $data = ['id' => 101, 'name' => 'Rabbit', 'age' => 30];
 DBi::query('INSERT INTO table(?#) VALUES(?a) ON DUPLICATE KEY UPDATE ?a', array_keys($data), array_values($data), $data);
 ```
-áóäåò âûïîëíåí çàïðîñ
+Ð±ÑƒÐ´ÐµÑ‚ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½ Ð·Ð°Ð¿Ñ€Ð¾Ñ
 ```sql
 INSERT INTO table(`id`, `name`, `age`) VALUES(101, 'Rabbit', 30) ON DUPLICATE KEY UPDATE `id`='101', `name`='Rabbit', `age`='30'
 ```
 
-##Èñïîëüçîâàíèå âûáîðîê
-Âûáîðêà âñåãî ðåçóëüòàòà: select()
+##Ð˜ÑÐ¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ð½Ð¸Ðµ Ð²Ñ‹Ð±Ð¾Ñ€Ð¾Ðº
+Ð’Ñ‹Ð±Ð¾Ñ€ÐºÐ° Ð²ÑÐµÐ³Ð¾ Ñ€ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚Ð°: select()
 ```php
 $rows = DBi::select('SELECT Name, CountryCode FROM City');
 foreach($rows as $row){
@@ -77,13 +77,13 @@ foreach($rows as $row){
 }
 ```
 
-Âûáîðêà ñòðîêè: selectRow()
+Ð’Ñ‹Ð±Ð¾Ñ€ÐºÐ° ÑÑ‚Ñ€Ð¾ÐºÐ¸: selectRow()
 ```php
 $row = DBi::selectRow('SELECT Name, CountryCode FROM City LIMIT 1');
 printf("%s (%s)\n", $row["Name"], $row["CountryCode"]);
 ```
 
-Âûáîðêà ñòîëáöà: selectCol()
+Ð’Ñ‹Ð±Ð¾Ñ€ÐºÐ° ÑÑ‚Ð¾Ð»Ð±Ñ†Ð°: selectCol()
 ```php
 $names = DBi::selectCol('SELECT Name FROM City');
 foreach($names as $name){
@@ -91,13 +91,13 @@ foreach($names as $name){
 }
 ```
 
-Âûáîðêà ÿ÷åéêè: selectCell()
+Ð’Ñ‹Ð±Ð¾Ñ€ÐºÐ° ÑÑ‡ÐµÐ¹ÐºÐ¸: selectCell()
 ```php
 $name = DBi::selectCell('SELECT Name FROM City WHERE CountryCode=?', 'RU');
 printf("%s\n", $name);
 ```
 
-###Ìîæíî èñïîëüçîâàòü âðåìåííûå òàáëèöû
+###ÐœÐ¾Ð¶Ð½Ð¾ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÑŒ Ð²Ñ€ÐµÐ¼ÐµÐ½Ð½Ñ‹Ðµ Ñ‚Ð°Ð±Ð»Ð¸Ñ†Ñ‹
 ```php
 DBi::query('CREATE TEMPORARY TABLE t1 SELECT Name, CountryCode FROM City');
 $rows = DBi::select('SELECT * FROM t1');
@@ -106,8 +106,8 @@ foreach($rows as $row){
 }
 ```
 
-###Ýêîíîìèÿ ïàìÿòè äëÿ áîëüøèõ âûáîðîê
-Ìîæíî ïîëó÷àòü ðåçóëüòàò ïî îäíîé ñòðîêå, íå çàãðóæàÿ âñþ âûáîðêó â ïàìÿòü
+###Ð­ÐºÐ¾Ð½Ð¾Ð¼Ð¸Ñ Ð¿Ð°Ð¼ÑÑ‚Ð¸ Ð´Ð»Ñ Ð±Ð¾Ð»ÑŒÑˆÐ¸Ñ… Ð²Ñ‹Ð±Ð¾Ñ€Ð¾Ðº
+ÐœÐ¾Ð¶Ð½Ð¾ Ð¿Ð¾Ð»ÑƒÑ‡Ð°Ñ‚ÑŒ Ñ€ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚ Ð¿Ð¾ Ð¾Ð´Ð½Ð¾Ð¹ ÑÑ‚Ñ€Ð¾ÐºÐµ, Ð½Ðµ Ð·Ð°Ð³Ñ€ÑƒÐ¶Ð°Ñ Ð²ÑÑŽ Ð²Ñ‹Ð±Ð¾Ñ€ÐºÑƒ Ð² Ð¿Ð°Ð¼ÑÑ‚ÑŒ
 ```php
 $result = DBi::query('SELECT Name, CountryCode FROM City');
 while($row = $result->fetch_assoc()){

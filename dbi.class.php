@@ -1,8 +1,10 @@
 <?php
 class DBi {
     public static $mysqli;
+	public static $tmp_mysqli;
 	public static $skip_error;
 	public static $query_log_file;
+	private static $result;
 	
 	public static function prepare(){
 		$args = func_get_args();
@@ -58,17 +60,22 @@ class DBi {
 		self::init();
 		$query = call_user_func_array(array(__CLASS__, 'prepare'), func_get_args());	
 		
-		if(self::$query_log_file){
-			file_put_contents(self::$query_log_file, $query."\n", FILE_APPEND);
+		//логгирование запросов
+		if(self::$query_log_file) file_put_contents(self::$query_log_file, $query."\n", FILE_APPEND);
+
+		if(!empty(self::$result)){ //если есть незавершенная выборка - выполним запрос в новом соединении
+			self::$tmp_mysqli = new mysqli(dbhost, dbuser, dbpass, dbname); 
+			self::$result = self::$tmp_mysqli->query($query, MYSQLI_USE_RESULT);
+		}else{ //обычная выборка
+			self::$result = self::$mysqli->query($query, MYSQLI_USE_RESULT);
 		}
 		
-		$result = self::$mysqli->query($query, MYSQLI_USE_RESULT);
-		if(!$result && !self::$skip_error){ 
+		if(!self::$result && !self::$skip_error){
 			echo("\nSQL Error: ".self::$mysqli->error."\n"); 
 			debug_print_backtrace(); 
 			die;
 		} else 
-			return $result;
+			return self::$result;
 	}
 	
 	public static function select(){

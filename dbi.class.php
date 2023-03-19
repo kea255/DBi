@@ -63,7 +63,8 @@ class DBi {
 		//логгирование запросов
 		if(self::$query_log_file) file_put_contents(self::$query_log_file, $query."\n", FILE_APPEND);
 
-		if(!empty(self::$result)){ //если есть незавершенная выборка - выполним запрос в новом соединении
+		if(!empty(self::$result->lengths)){ //если есть незавершенная выборка - выполним запрос в новом соединении
+			if(!empty(self::$tmp_mysqli)) self::$tmp_mysqli->close();
 			self::$tmp_mysqli = new mysqli(dbhost, dbuser, dbpass, dbname); 
 			self::$result = self::$tmp_mysqli->query($query, MYSQLI_USE_RESULT);
 		}else{ //обычная выборка
@@ -71,7 +72,7 @@ class DBi {
 		}
 		
 		if(!self::$result && !self::$skip_error){
-			echo("\nSQL Error: ".self::$mysqli->error."\n"); 
+			echo("\nSQL Error: ".(self::$mysqli->error?:self::$tmp_mysqli->error)."\n"); 
 			debug_print_backtrace(); 
 			die;
 		} else 

@@ -1,10 +1,10 @@
 <?php
 class DBi {
     public static $mysqli;
-	public static $tmp_mysqli;
 	public static $skip_error;
 	public static $query_log_file;
 	private static $result;
+	private static $second_mysqli;
 	
 	public static function prepare(){
 		$args = func_get_args();
@@ -63,20 +63,24 @@ class DBi {
 		//логгирование запросов
 		if(self::$query_log_file) file_put_contents(self::$query_log_file, $query."\n", FILE_APPEND);
 
-		if(!empty(self::$result->lengths)){ //если есть незавершенная выборка - выполним запрос в новом соединении
-			if(!empty(self::$tmp_mysqli)) self::$tmp_mysqli->close();
-			self::$tmp_mysqli = new mysqli(dbhost, dbuser, dbpass, dbname); 
-			self::$result = self::$tmp_mysqli->query($query, MYSQLI_USE_RESULT);
+		if(!empty(self::$result->field_count)){ //если есть незавершенная выборка - выполним запрос в новом соединении
+			if(!self::$second_mysqli) self::$second_mysqli = new mysqli(dbhost, dbuser, dbpass, dbname); 
+			$result = self::$second_mysqli->query($query, MYSQLI_USE_RESULT);
+			return self::check_result($result);
 		}else{ //обычная выборка
 			self::$result = self::$mysqli->query($query, MYSQLI_USE_RESULT);
 		}
 		
-		if(!self::$result && !self::$skip_error){
-			echo("\nSQL Error: ".(self::$mysqli->error?:self::$tmp_mysqli->error)."\n"); 
+		return self::check_result(self::$result);
+	}
+	
+	private static function check_result($result){
+		if(!$result && !self::$skip_error){
+			echo("\nSQL Error: ".(self::$mysqli->error?:self::$second_mysqli->error)."\n"); 
 			debug_print_backtrace(); 
 			die;
 		} else 
-			return self::$result;
+			return $result;
 	}
 	
 	public static function select(){

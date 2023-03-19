@@ -59,7 +59,7 @@ class DBi {
 		$query = call_user_func_array(array(__CLASS__, 'prepare'), func_get_args());	
 		
 		if(self::$query_log_file){
-			file_put_contents(self::$query_log_file, $query, FILE_APPEND);
+			file_put_contents(self::$query_log_file, $query."\n", FILE_APPEND);
 		}
 		
 		$result = self::$mysqli->query($query, MYSQLI_USE_RESULT);

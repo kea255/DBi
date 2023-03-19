@@ -1,6 +1,8 @@
 <?php
 class DBi {
     public static $mysqli;
+	public static $skip_error;
+	public static $query_log_file;
 	
 	public static function prepare(){
 		$args = func_get_args();
@@ -55,14 +57,18 @@ class DBi {
 	public static function query(){
 		self::init();
 		$query = call_user_func_array(array(__CLASS__, 'prepare'), func_get_args());	
+		
+		if(self::$query_log_file){
+			file_put_contents(self::$query_log_file, $query, FILE_APPEND);
+		}
+		
 		$result = self::$mysqli->query($query, MYSQLI_USE_RESULT);
-		if(!$result){ echo("\nSQL Error: ".self::$mysqli->error."\n"); debug_print_backtrace(); die;} else return $result;
-	}
-	
-	public static function query_skip_err(){
-		self::init();
-		$query = call_user_func_array(array(__CLASS__, 'prepare'), func_get_args());	
-		$result = self::$mysqli->query($query, MYSQLI_USE_RESULT);
+		if(!$result && !self::$skip_error){ 
+			echo("\nSQL Error: ".self::$mysqli->error."\n"); 
+			debug_print_backtrace(); 
+			die;
+		} else 
+			return $result;
 	}
 	
 	public static function select(){

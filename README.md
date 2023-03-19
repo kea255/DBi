@@ -113,6 +113,7 @@ foreach($rows as $row){
     printf("%s (%s)\n", $row["Name"], $row["CountryCode"]);
 }
 ```
+<br/>
 
 ### Экономия памяти для больших выборок
 Можно получать результат по одной строке, не загружая всю выборку в память
@@ -122,4 +123,16 @@ while($row = $result->fetch_assoc()){
 	printf("%s (%s)\n", $row["Name"], $row["CountryCode"]);
 }
 $result->free();
+```
+<br/>
+
+### Логирование запросов
+```php
+DBi::$query_log_file = __DIR__.'/db_log.txt';
+```
+<br/>
+
+### Не останавливать скрипт при ошибках SQL
+```php
+DBi::$skip_error = true;
 ```

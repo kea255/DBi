@@ -74,6 +74,11 @@ class DBi {
 		return self::check_result(self::$result);
 	}
 	
+	public static function query_cnt(){
+		$result = call_user_func_array(array(__CLASS__, 'query'), func_get_args());
+		return self::$mysqli->affected_rows ?: 0;
+	}
+	
 	private static function check_result($result){
 		if(!$result && !self::$skip_error){
 			echo("\nSQL Error: ".(self::$mysqli->error?:self::$second_mysqli->error)."\n"); 

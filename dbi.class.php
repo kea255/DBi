@@ -25,7 +25,7 @@ class DBi {
 					if(self::is_assoc($val))
 						foreach($val as $k=>$v) $val[$k] = "`$k`='".self::$mysqli->real_escape_string($v)."'";
 					else
-						foreach($val as $k=>$v) if(gettype($v)=='string') $val[$k] = "'".self::$mysqli->real_escape_string($v)."'";
+						foreach($val as $k=>$v) if(in_array(gettype($v),['string','NULL'])) $val[$k] = "'".self::$mysqli->real_escape_string($v)."'";
 					$val = implode(', ', array_values($val));
 				}else
 				if($mod=='#'){

@@ -43,11 +43,11 @@ class DBi {
 				
 			}else{
 				die("Err: uncnown type var='$var', type='$type' from query='$query'");
-			}			
+			}
 			
 			$repl_len = in_array($mod,['a','#']) ? 2 : 1;
 			$query = self::mb_substr_replace($query, $val, $pos, $repl_len);
-			$offset += $pos + $repl_len + mb_strlen($val);
+			$offset = $pos + mb_strlen($val) - $repl_len;
 			$idx++;
 		}
 		

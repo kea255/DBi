@@ -11,7 +11,8 @@ class DBi {
 		$query = array_shift($args);
 
 		$idx=0;
-		while(($pos = mb_strpos($query, '?')) !== FALSE){
+		$offset=0;
+		while($offset < mb_strlen($query) && ($pos = mb_strpos($query, '?', $offset)) !== FALSE){
 			$mod = mb_substr($query, $pos+1, 1);
 			$val = $args[$idx];
 			$type = gettype($val);
@@ -44,7 +45,9 @@ class DBi {
 				die("Err: uncnown type var='$var', type='$type' from query='$query'");
 			}			
 			
-			$query = self::mb_substr_replace($query, $val, $pos, in_array($mod,['a','#']) ? 2 : 1);
+			$repl_len = in_array($mod,['a','#']) ? 2 : 1;
+			$query = self::mb_substr_replace($query, $val, $pos, $repl_len);
+			$offset += $pos + $repl_len + mb_strlen($val);
 			$idx++;
 		}
 		

@@ -121,7 +121,7 @@ foreach($rows as $row){
 $result = DBi::query('SELECT Name, CountryCode FROM City');
 while($row = $result->fetch_assoc()){
 	printf("%s (%s)\n", $row["Name"], $row["CountryCode"]);
-} $rows->free();
+}
 $result->free();
 ```
 <br/>

@@ -47,7 +47,7 @@ class DBi {
 			
 			$repl_len = in_array($mod,['a','#']) ? 2 : 1;
 			$query = self::mb_substr_replace($query, $val, $pos, $repl_len);
-			$offset = $pos + mb_strlen($val) - $repl_len;
+			$offset = $pos + mb_strlen($val);
 			$idx++;
 		}
 		

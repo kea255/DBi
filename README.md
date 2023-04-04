@@ -136,3 +136,22 @@ DBi::$query_log_file = __DIR__.'/db_log.txt';
 ```php
 DBi::$skip_error = true;
 ```
+<br/>
+
+### Транзакции
+Пример ускорения обновления большого количества строк в цикле
+```php
+$cnt = 0; 
+$query_in_trans = 10000;
+DBi::transaction();
+while($reader->read()){
+	$cnt++;
+	if($cnt % $query_in_trans == 0){ 
+		DBi::commit(); 
+		DBi::transaction(); 
+	}
+	
+	DBi::query("UPDATE `table` SET ?a WHERE id=?", $data, $id);
+}
+DBi::commit();	
+```

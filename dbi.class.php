@@ -130,12 +130,17 @@ class DBi {
 		self::$mysqli->rollback();
 	}
 	
-	private static function _pass_by_reference(&$arr){
-		$refs = array();
-		foreach($arr as $key => $value){
-			$refs[$key] = &$arr[$key];
+	private static function escape($string){
+		$return = '';
+		for($i = 0; $i < strlen($string); ++$i) {
+			$char = $string[$i];
+			$ord = ord($char);
+			if($char !== "'" && $char !== "\"" && $char !== '\\' && $ord >= 32 && $ord <= 126)
+				$return .= $char;
+			else
+				$return .= '\\x' . dechex($ord);
 		}
-		return $refs;
+		return $return;
 	}
 	
 	private static function mb_substr_replace($original, $replacement, $position, $length){

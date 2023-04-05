@@ -138,6 +138,12 @@ DBi::$skip_error = true;
 ```
 <br/>
 
+### Получить число строк, затронутых INSERT, UPDATE, REPLACE или DELETE запросом.
+```php
+echo DBi::query_cnt('UPDATE table SET dat=NOW() WHERE id IN(13,17)');
+```
+<br/>
+
 ### Транзакции
 Пример ускорения обновления большого количества строк в цикле
 ```php

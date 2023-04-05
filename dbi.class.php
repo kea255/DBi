@@ -56,7 +56,7 @@ class DBi {
 	
 	public static function init(){
 		if(!self::$mysqli){
-			self::$mysqli = new mysqli(dbhost, dbuser, dbpass, dbname); 
+			self::$mysqli = new mysqli(dbhost, dbuser, dbpass, dbname);
 			if(self::$mysqli->connect_error) die('Ошибка подключения ('.self::$mysqli->connect_errno.') '.self::$mysqli->connect_error);
 		}
 	}

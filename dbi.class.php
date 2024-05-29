@@ -96,6 +96,7 @@ class DBi {
 	public static function select(){
 		$res = [];
 		$rows = call_user_func_array(array(__CLASS__, 'query'), func_get_args());
+		if(!$rows) return $res;
 		while($row = $rows->fetch_assoc()) $res[]=$row;
 		$rows->free();
 		return $res;
@@ -103,12 +104,14 @@ class DBi {
 	public static function selectCol(){
 		$res = [];
 		$rows = call_user_func_array(array(__CLASS__, 'query'), func_get_args());
+		if(!$rows) return $res;
 		while($row = $rows->fetch_assoc()) $res[] = array_shift($row);
 		$rows->free();
 		return $res;
 	}
 	public static function selectRow(){
 		$rows = call_user_func_array(array(__CLASS__, 'query'), func_get_args());
+		if(!$rows) return [];
 		$row = $rows->fetch_assoc();
 		$rows->free();
 		return $row;
@@ -116,6 +119,7 @@ class DBi {
 	public static function selectCell(){
 		$res = null;
 		$rows = call_user_func_array(array(__CLASS__, 'query'), func_get_args());
+		if(!$rows) return $res;
 		$row = $rows->fetch_assoc();
 		$res = array_shift($row);
 		$rows->free();

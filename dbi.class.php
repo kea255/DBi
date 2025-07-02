@@ -117,11 +117,10 @@ class DBi {
 		return $row;
 	}
 	public static function selectCell(){
-		$res = null;
 		$rows = call_user_func_array(array(__CLASS__, 'query'), func_get_args());
 		if(!$rows) return $res;
 		$row = $rows->fetch_assoc();
-		$res = array_shift($row);
+		$res = !empty($row) ? array_shift($row) : null;
 		$rows->free();
 		return $res;
 	}
